@@ -1,0 +1,447 @@
+# PROPOSAL FOR THE DEVELOPMENT AND IMPLEMENTATION OF AN ICT HELPDESK, ASSET MANAGEMENT AND SERVICE DESK SYSTEM FOR THE DEPARTMENT OF LANDS, ENERGY, PHYSICAL PLANNING AND URBAN DEVELOPMENT, KILIFI COUNTY GOVERNMENT
+
+## Submitted To
+
+The Chief Officer
+
+Department of Lands, Energy, Physical Planning and Urban Development
+
+Kilifi County Government
+
+## Submitted By
+
+ICT Unit
+
+Department of Lands, Energy, Physical Planning and Urban Development
+
+Date: June 2026
+
+---
+
+# 1. EXECUTIVE SUMMARY
+
+The Department of Lands, Energy, Physical Planning and Urban Development relies heavily on Information and Communication Technology (ICT) infrastructure to support service delivery, communication, planning, mapping, land administration, urban development management and energy-related operations.
+
+As the department continues to embrace digital transformation, the need for a centralized ICT support and management platform has become increasingly important. Currently, ICT incidents, service requests, equipment faults and user support requests are handled through informal channels such as phone calls, emails, physical visits and instant messaging applications. This approach makes it difficult to track requests, monitor performance, manage assets and ensure accountability.
+
+To address these challenges, the Department proposes the development and implementation of an ICT Helpdesk, Asset Management and Service Desk System. The system will provide a centralized platform for managing ICT support requests, tracking ICT assets, monitoring service performance, scheduling preventive maintenance, managing software licenses and generating management reports.
+
+The proposed solution will improve operational efficiency, enhance service delivery, strengthen accountability, reduce downtime and support informed decision-making through real-time dashboards and reporting tools.
+
+---
+
+# 2. BACKGROUND
+
+The Department of Lands, Energy, Physical Planning and Urban Development operates various ICT resources including desktop computers, laptops, printers, plotters, scanners, servers, networking devices, GIS workstations, surveillance systems and communication infrastructure.
+
+As the number of users and ICT assets continues to grow, the department faces several operational challenges including:
+
+* Lack of a centralized ICT support system.
+* Difficulty tracking ICT issues and requests.
+* Delayed resolution of technical problems.
+* Poor visibility of ICT asset allocation.
+* Limited monitoring of service performance.
+* Inadequate maintenance planning.
+* Lack of accurate ICT inventory records.
+* Difficulty generating management reports.
+
+The implementation of an integrated ICT Service Desk and Asset Management System will provide a sustainable solution to these challenges while supporting the department’s digital transformation agenda.
+
+---
+
+# 3. PROBLEM STATEMENT
+
+The absence of a centralized ICT support management system has resulted in inefficient handling of ICT-related incidents and service requests. Staff members often report technical issues through informal channels, making it difficult to track requests, monitor resolution timelines and maintain service quality standards.
+
+Additionally, the department lacks a comprehensive system for managing ICT assets, software licenses and maintenance schedules, leading to challenges in resource planning and accountability.
+
+Without an integrated ICT management platform, the department risks increased downtime, reduced productivity and inefficient utilization of ICT resources.
+
+---
+
+# 4. PROJECT JUSTIFICATION
+
+The proposed ICT Helpdesk and Asset Management System will address current operational inefficiencies by introducing a structured, transparent and accountable approach to ICT service delivery.
+
+The system will:
+
+* Improve ICT service response times.
+* Enhance accountability and transparency.
+* Improve ICT asset tracking.
+* Reduce equipment downtime.
+* Support preventive maintenance.
+* Improve reporting and decision-making.
+* Strengthen ICT governance.
+* Enhance staff productivity.
+* Support digital transformation initiatives.
+
+---
+
+# 5. PROJECT OBJECTIVES
+
+## 5.1 General Objective
+
+To develop and implement an integrated ICT Helpdesk, Asset Management and Service Desk System that improves ICT service delivery and resource management within the Department of Lands, Energy, Physical Planning and Urban Development.
+
+## 5.2 Specific Objectives
+
+The project seeks to:
+
+1. Establish a centralized ICT helpdesk platform.
+2. Improve management of ICT incidents and service requests.
+3. Implement a comprehensive ICT asset management system.
+4. Improve tracking of software licenses and warranties.
+5. Support preventive maintenance activities.
+6. Enhance ICT performance monitoring.
+7. Improve reporting and management oversight.
+8. Promote accountability and transparency in ICT operations.
+
+---
+
+# 6. PROJECT SCOPE
+
+The project will cover all ICT support operations within the Department of Lands, Energy, Physical Planning and Urban Development.
+
+The system will support:
+
+* ICT incident management.
+* Service request management.
+* Asset management.
+* Inventory management.
+* Maintenance management.
+* User management.
+* Reporting and analytics.
+* Knowledge management.
+* Notifications and communication.
+
+---
+
+# 7. SYSTEM COMPONENTS
+
+## 7.1 ICT Helpdesk Module
+
+The ICT Helpdesk Module will provide a platform through which users can report ICT-related incidents and service requests.
+
+Users will be able to:
+
+* Submit tickets online.
+* Track ticket progress.
+* Receive notifications.
+* Attach supporting documents.
+* View ticket history.
+
+Ticket categories will include:
+
+### Hardware Support
+
+* Desktop computers.
+* Laptops.
+* Printers.
+* Scanners.
+* UPS devices.
+* Plotters.
+
+### Software Support
+
+* Operating systems.
+* Microsoft Office applications.
+* GIS applications.
+* Email services.
+* Antivirus software.
+
+### Network Support
+
+* Internet connectivity.
+* Wi-Fi access.
+* LAN connectivity.
+* VPN services.
+
+### User Support
+
+* Password resets.
+* User account creation.
+* Access requests.
+
+---
+
+## 7.2 ICT Asset Management Module
+
+The Asset Management Module will maintain a complete inventory of ICT assets.
+
+The system will capture:
+
+* Asset identification number.
+* Serial number.
+* Asset category.
+* Manufacturer.
+* Model.
+* Purchase date.
+* Warranty information.
+* Current location.
+* Assigned user.
+* Asset status.
+
+The system will support QR code generation for asset identification and tracking.
+
+---
+
+## 7.3 Inventory Management Module
+
+The inventory module will manage ICT consumables and spare parts.
+
+Items to be tracked include:
+
+* Toners.
+* Network cables.
+* Routers.
+* Switches.
+* Hard drives.
+* Memory modules.
+* Batteries.
+* Connectors.
+
+The module will support stock monitoring and low-stock alerts.
+
+---
+
+## 7.4 Preventive Maintenance Module
+
+The system will facilitate planned maintenance activities for ICT equipment.
+
+Maintenance schedules will be created for:
+
+* Servers.
+* Computers.
+* Printers.
+* Networking equipment.
+* CCTV systems.
+* GIS equipment.
+
+Automated reminders will be generated for upcoming maintenance activities.
+
+---
+
+## 7.5 Knowledge Base Module
+
+The Knowledge Base will provide users with self-service support resources.
+
+Resources will include:
+
+* User manuals.
+* Standard operating procedures.
+* Troubleshooting guides.
+* Frequently asked questions.
+* ICT policies and guidelines.
+
+---
+
+## 7.6 Reporting and Dashboard Module
+
+The reporting module will provide management with real-time operational insights.
+
+Reports will include:
+
+* Open tickets.
+* Closed tickets.
+* Ticket resolution times.
+* Asset inventory reports.
+* Maintenance reports.
+* User activity reports.
+* Department performance reports.
+
+Reports will be exportable in PDF and Excel formats.
+
+---
+
+## 7.7 Mobile Access
+
+The system will support mobile access to enable users and ICT officers to access services from smartphones and tablets.
+
+Features will include:
+
+* Ticket submission.
+* Status tracking.
+* Asset scanning.
+* Notifications.
+* Field service updates.
+
+---
+
+# 8. EXPECTED BENEFITS
+
+Implementation of the system will result in:
+
+### Operational Benefits
+
+* Faster issue resolution.
+* Improved service delivery.
+* Reduced system downtime.
+* Improved workflow management.
+
+### Financial Benefits
+
+* Better asset utilization.
+* Reduced maintenance costs.
+* Improved budget planning.
+
+### Administrative Benefits
+
+* Enhanced accountability.
+* Improved reporting.
+* Better decision-making.
+
+### User Benefits
+
+* Improved user satisfaction.
+* Transparent service delivery.
+* Easy access to ICT support services.
+
+---
+
+# 9. IMPLEMENTATION APPROACH
+
+The project will be implemented in six phases:
+
+## Phase 1: Requirements Analysis
+
+Duration: Two Weeks
+
+Activities:
+
+* Stakeholder consultations.
+* Needs assessment.
+* Documentation of requirements.
+
+## Phase 2: System Design
+
+Duration: Three Weeks
+
+Activities:
+
+* Architecture design.
+* Database design.
+* User interface design.
+
+## Phase 3: Development
+
+Duration: Eight Weeks
+
+Activities:
+
+* System coding.
+* Module integration.
+* Configuration.
+
+## Phase 4: Testing
+
+Duration: Three Weeks
+
+Activities:
+
+* Unit testing.
+* User acceptance testing.
+* Bug fixing.
+
+## Phase 5: Training
+
+Duration: Two Weeks
+
+Activities:
+
+* User training.
+* Administrator training.
+* Documentation.
+
+## Phase 6: Deployment
+
+Duration: Two Weeks
+
+Activities:
+
+* Production deployment.
+* Data migration.
+* Go-live support.
+
+---
+
+# 10. TECHNOLOGY STACK
+
+The proposed system shall utilize modern technologies including:
+
+Frontend:
+
+* ReactJS
+* NextJS
+* Tailwind CSS
+
+Backend:
+
+* Laravel Framework
+
+Database:
+
+* PostgreSQL
+
+Mobile:
+
+* Flutter
+
+Authentication:
+
+* Laravel Sanctum
+
+Hosting:
+
+* Government Data Centre or Secure Cloud Infrastructure
+
+---
+
+# 11. PROJECT TIMELINE
+
+The project is expected to be completed within twenty weeks, equivalent to five months.
+
+---
+
+# 12. ESTIMATED PROJECT BUDGET
+
+| Item                               | Cost (KES) |
+| ---------------------------------- | ---------: |
+| Requirements Analysis              |    300,000 |
+| System Design                      |    500,000 |
+| Software Development               |  2,000,000 |
+| Asset Management Module            |    500,000 |
+| Mobile Application                 |    800,000 |
+| Testing and Quality Assurance      |    300,000 |
+| Training                           |    200,000 |
+| Deployment                         |    200,000 |
+| Support and Maintenance (Year One) |    700,000 |
+
+Total Estimated Budget: KES 5,500,000
+
+---
+
+# 13. RISK MANAGEMENT
+
+Potential risks include:
+
+* User resistance to change.
+* Delays in approvals.
+* Budget constraints.
+* Technical integration challenges.
+
+Mitigation measures include:
+
+* Stakeholder engagement.
+* Adequate training.
+* Strong project governance.
+* Continuous monitoring.
+
+---
+
+# 14. CONCLUSION
+
+The implementation of an ICT Helpdesk, Asset Management and Service Desk System represents a strategic investment in the digital transformation of the Department of Lands, Energy, Physical Planning and Urban Development.
+
+The proposed solution will improve service delivery, strengthen accountability, optimize resource utilization and support effective management of ICT infrastructure. Through automation, centralized management and data-driven decision-making, the department will be better positioned to deliver efficient and reliable services to its staff and stakeholders.
+
+The Department is therefore requested to approve and support the implementation of this project for the benefit of the organization and the achievement of its strategic objectives.

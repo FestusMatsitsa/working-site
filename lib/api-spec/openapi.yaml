@@ -3,20 +3,33 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: ICT Helpdesk & Asset Management API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: tickets
+    description: Helpdesk ticket operations
+  - name: assets
+    description: ICT asset management
+  - name: inventory
+    description: Consumables and spare parts inventory
+  - name: maintenance
+    description: Preventive maintenance scheduling
+  - name: knowledge
+    description: Knowledge base articles
+  - name: users
+    description: User management
+  - name: dashboard
+    description: Dashboard and reporting
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +37,725 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # ── Tickets ─────────────────────────────────────────────────────────────
+  /tickets:
+    get:
+      operationId: listTickets
+      tags: [tickets]
+      summary: List all tickets
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: priority
+          in: query
+          schema:
+            type: string
+        - name: assignedTo
+          in: query
+          schema:
+            type: ["integer", "null"]
+      responses:
+        "200":
+          description: List of tickets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ticket"
+    post:
+      operationId: createTicket
+      tags: [tickets]
+      summary: Submit a new ticket
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TicketInput"
+      responses:
+        "201":
+          description: Ticket created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticket"
+
+  /tickets/{id}:
+    get:
+      operationId: getTicket
+      tags: [tickets]
+      summary: Get ticket by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Ticket
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticket"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateTicket
+      tags: [tickets]
+      summary: Update ticket
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TicketUpdate"
+      responses:
+        "200":
+          description: Updated ticket
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticket"
+
+  /tickets/{id}/comments:
+    get:
+      operationId: listTicketComments
+      tags: [tickets]
+      summary: List comments on a ticket
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Comments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TicketComment"
+    post:
+      operationId: addTicketComment
+      tags: [tickets]
+      summary: Add a comment to a ticket
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TicketCommentInput"
+      responses:
+        "201":
+          description: Comment added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TicketComment"
+
+  # ── Assets ───────────────────────────────────────────────────────────────
+  /assets:
+    get:
+      operationId: listAssets
+      tags: [assets]
+      summary: List all ICT assets
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: location
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Asset"
+    post:
+      operationId: createAsset
+      tags: [assets]
+      summary: Register a new ICT asset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssetInput"
+      responses:
+        "201":
+          description: Asset created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Asset"
+
+  /assets/{id}:
+    get:
+      operationId: getAsset
+      tags: [assets]
+      summary: Get asset by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Asset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Asset"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateAsset
+      tags: [assets]
+      summary: Update asset
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssetUpdate"
+      responses:
+        "200":
+          description: Updated asset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Asset"
+    delete:
+      operationId: deleteAsset
+      tags: [assets]
+      summary: Delete asset
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /assets/stats/summary:
+    get:
+      operationId: getAssetStats
+      tags: [assets]
+      summary: Get asset statistics summary
+      responses:
+        "200":
+          description: Asset stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetStats"
+
+  # ── Inventory ────────────────────────────────────────────────────────────
+  /inventory:
+    get:
+      operationId: listInventory
+      tags: [inventory]
+      summary: List inventory items
+      parameters:
+        - name: lowStock
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Inventory items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InventoryItem"
+    post:
+      operationId: createInventoryItem
+      tags: [inventory]
+      summary: Add a new inventory item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InventoryItemInput"
+      responses:
+        "201":
+          description: Item created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InventoryItem"
+
+  /inventory/{id}:
+    get:
+      operationId: getInventoryItem
+      tags: [inventory]
+      summary: Get inventory item by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Inventory item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InventoryItem"
+    patch:
+      operationId: updateInventoryItem
+      tags: [inventory]
+      summary: Update inventory item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InventoryItemUpdate"
+      responses:
+        "200":
+          description: Updated item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InventoryItem"
+    delete:
+      operationId: deleteInventoryItem
+      tags: [inventory]
+      summary: Delete inventory item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ── Maintenance ──────────────────────────────────────────────────────────
+  /maintenance:
+    get:
+      operationId: listMaintenanceSchedules
+      tags: [maintenance]
+      summary: List maintenance schedules
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: upcoming
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Maintenance schedules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MaintenanceSchedule"
+    post:
+      operationId: createMaintenanceSchedule
+      tags: [maintenance]
+      summary: Create a maintenance schedule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MaintenanceScheduleInput"
+      responses:
+        "201":
+          description: Schedule created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MaintenanceSchedule"
+
+  /maintenance/{id}:
+    get:
+      operationId: getMaintenanceSchedule
+      tags: [maintenance]
+      summary: Get maintenance schedule by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Schedule
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MaintenanceSchedule"
+    patch:
+      operationId: updateMaintenanceSchedule
+      tags: [maintenance]
+      summary: Update maintenance schedule
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MaintenanceScheduleUpdate"
+      responses:
+        "200":
+          description: Updated schedule
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MaintenanceSchedule"
+    delete:
+      operationId: deleteMaintenanceSchedule
+      tags: [maintenance]
+      summary: Delete maintenance schedule
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ── Knowledge Base ───────────────────────────────────────────────────────
+  /knowledge:
+    get:
+      operationId: listKnowledgeArticles
+      tags: [knowledge]
+      summary: List knowledge base articles
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Articles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/KnowledgeArticle"
+    post:
+      operationId: createKnowledgeArticle
+      tags: [knowledge]
+      summary: Create knowledge article
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KnowledgeArticleInput"
+      responses:
+        "201":
+          description: Article created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeArticle"
+
+  /knowledge/{id}:
+    get:
+      operationId: getKnowledgeArticle
+      tags: [knowledge]
+      summary: Get knowledge article by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Article
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeArticle"
+    patch:
+      operationId: updateKnowledgeArticle
+      tags: [knowledge]
+      summary: Update knowledge article
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KnowledgeArticleUpdate"
+      responses:
+        "200":
+          description: Updated article
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeArticle"
+    delete:
+      operationId: deleteKnowledgeArticle
+      tags: [knowledge]
+      summary: Delete knowledge article
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ── Users ────────────────────────────────────────────────────────────────
+  /users:
+    get:
+      operationId: listUsers
+      tags: [users]
+      summary: List all staff users
+      responses:
+        "200":
+          description: Users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+    post:
+      operationId: createUser
+      tags: [users]
+      summary: Create a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInput"
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /users/{id}:
+    get:
+      operationId: getUser
+      tags: [users]
+      summary: Get user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    patch:
+      operationId: updateUser
+      tags: [users]
+      summary: Update user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdate"
+      responses:
+        "200":
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    delete:
+      operationId: deleteUser
+      tags: [users]
+      summary: Delete user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ── Dashboard ────────────────────────────────────────────────────────────
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get overall dashboard summary
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /dashboard/tickets-by-status:
+    get:
+      operationId: getTicketsByStatus
+      tags: [dashboard]
+      summary: Ticket counts grouped by status
+      responses:
+        "200":
+          description: Tickets by status
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StatusCount"
+
+  /dashboard/tickets-by-category:
+    get:
+      operationId: getTicketsByCategory
+      tags: [dashboard]
+      summary: Ticket counts grouped by category
+      responses:
+        "200":
+          description: Tickets by category
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CategoryCount"
+
+  /dashboard/recent-tickets:
+    get:
+      operationId: getRecentTickets
+      tags: [dashboard]
+      summary: Most recent tickets
+      responses:
+        "200":
+          description: Recent tickets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ticket"
+
+  /dashboard/upcoming-maintenance:
+    get:
+      operationId: getUpcomingMaintenance
+      tags: [dashboard]
+      summary: Upcoming maintenance schedules
+      responses:
+        "200":
+          description: Upcoming maintenance
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MaintenanceSchedule"
+
+  /dashboard/low-stock-items:
+    get:
+      operationId: getLowStockItems
+      tags: [dashboard]
+      summary: Inventory items below minimum stock level
+      responses:
+        "200":
+          description: Low stock items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InventoryItem"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +766,627 @@ components:
       required:
         - status
 
+    # ── Ticket schemas ─────────────────────────────────────────────────────
+    Ticket:
+      type: object
+      required:
+        - id
+        - title
+        - category
+        - subcategory
+        - priority
+        - status
+        - reportedBy
+        - createdAt
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: ["string", "null"]
+        category:
+          type: string
+          description: "hardware | software | network | user_support"
+        subcategory:
+          type: string
+        priority:
+          type: string
+          description: "low | medium | high | critical"
+        status:
+          type: string
+          description: "open | in_progress | on_hold | resolved | closed"
+        reportedBy:
+          type: string
+        reporterEmail:
+          type: ["string", "null"]
+        reporterDepartment:
+          type: ["string", "null"]
+        assignedTo:
+          type: ["integer", "null"]
+        assignedToName:
+          type: ["string", "null"]
+        assetId:
+          type: ["integer", "null"]
+        resolution:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        updatedAt:
+          type: ["string", "null"]
+        resolvedAt:
+          type: ["string", "null"]
+
+    TicketInput:
+      type: object
+      required:
+        - title
+        - category
+        - subcategory
+        - priority
+        - reportedBy
+      properties:
+        title:
+          type: string
+          minLength: 3
+        description:
+          type: string
+        category:
+          type: string
+        subcategory:
+          type: string
+        priority:
+          type: string
+        reportedBy:
+          type: string
+        reporterEmail:
+          type: string
+        reporterDepartment:
+          type: string
+        assignedTo:
+          type: ["integer", "null"]
+        assetId:
+          type: ["integer", "null"]
+
+    TicketUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        subcategory:
+          type: string
+        priority:
+          type: string
+        status:
+          type: string
+        assignedTo:
+          type: ["integer", "null"]
+        resolution:
+          type: string
+
+    TicketComment:
+      type: object
+      required:
+        - id
+        - ticketId
+        - authorName
+        - content
+        - createdAt
+      properties:
+        id:
+          type: integer
+        ticketId:
+          type: integer
+        authorName:
+          type: string
+        content:
+          type: string
+        isInternal:
+          type: boolean
+        createdAt:
+          type: string
+
+    TicketCommentInput:
+      type: object
+      required:
+        - authorName
+        - content
+      properties:
+        authorName:
+          type: string
+        content:
+          type: string
+        isInternal:
+          type: boolean
+
+    # ── Asset schemas ──────────────────────────────────────────────────────
+    Asset:
+      type: object
+      required:
+        - id
+        - assetTag
+        - name
+        - category
+        - status
+        - createdAt
+      properties:
+        id:
+          type: integer
+        assetTag:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+          description: "desktop | laptop | printer | scanner | server | network | gis | ups | plotter | cctv | other"
+        manufacturer:
+          type: ["string", "null"]
+        model:
+          type: ["string", "null"]
+        serialNumber:
+          type: ["string", "null"]
+        purchaseDate:
+          type: ["string", "null"]
+        warrantyExpiry:
+          type: ["string", "null"]
+        location:
+          type: ["string", "null"]
+        assignedTo:
+          type: ["integer", "null"]
+        assignedToName:
+          type: ["string", "null"]
+        status:
+          type: string
+          description: "active | inactive | under_repair | disposed"
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        updatedAt:
+          type: ["string", "null"]
+
+    AssetInput:
+      type: object
+      required:
+        - name
+        - category
+      properties:
+        assetTag:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+        manufacturer:
+          type: string
+        model:
+          type: string
+        serialNumber:
+          type: string
+        purchaseDate:
+          type: string
+        warrantyExpiry:
+          type: string
+        location:
+          type: string
+        assignedTo:
+          type: ["integer", "null"]
+        status:
+          type: string
+        notes:
+          type: string
+
+    AssetUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        manufacturer:
+          type: string
+        model:
+          type: string
+        serialNumber:
+          type: string
+        purchaseDate:
+          type: string
+        warrantyExpiry:
+          type: string
+        location:
+          type: string
+        assignedTo:
+          type: ["integer", "null"]
+        status:
+          type: string
+        notes:
+          type: string
+
+    AssetStats:
+      type: object
+      required:
+        - total
+        - active
+        - underRepair
+        - inactive
+        - disposed
+        - byCategory
+      properties:
+        total:
+          type: integer
+        active:
+          type: integer
+        underRepair:
+          type: integer
+        inactive:
+          type: integer
+        disposed:
+          type: integer
+        byCategory:
+          type: array
+          items:
+            $ref: "#/components/schemas/CategoryCount"
+
+    # ── Inventory schemas ──────────────────────────────────────────────────
+    InventoryItem:
+      type: object
+      required:
+        - id
+        - name
+        - category
+        - quantity
+        - minimumStock
+        - createdAt
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        category:
+          type: string
+          description: "toner | cable | router | switch | hard_drive | memory | battery | connector | other"
+        quantity:
+          type: integer
+        minimumStock:
+          type: integer
+        unit:
+          type: ["string", "null"]
+        location:
+          type: ["string", "null"]
+        supplier:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        isLowStock:
+          type: boolean
+        createdAt:
+          type: string
+        updatedAt:
+          type: ["string", "null"]
+
+    InventoryItemInput:
+      type: object
+      required:
+        - name
+        - category
+        - quantity
+        - minimumStock
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        quantity:
+          type: integer
+        minimumStock:
+          type: integer
+        unit:
+          type: string
+        location:
+          type: string
+        supplier:
+          type: string
+        notes:
+          type: string
+
+    InventoryItemUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        quantity:
+          type: integer
+        minimumStock:
+          type: integer
+        unit:
+          type: string
+        location:
+          type: string
+        supplier:
+          type: string
+        notes:
+          type: string
+
+    # ── Maintenance schemas ────────────────────────────────────────────────
+    MaintenanceSchedule:
+      type: object
+      required:
+        - id
+        - title
+        - assetCategory
+        - frequency
+        - scheduledDate
+        - status
+        - createdAt
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: ["string", "null"]
+        assetCategory:
+          type: string
+        assetId:
+          type: ["integer", "null"]
+        assetName:
+          type: ["string", "null"]
+        frequency:
+          type: string
+          description: "daily | weekly | monthly | quarterly | annually | one_time"
+        scheduledDate:
+          type: string
+        completedDate:
+          type: ["string", "null"]
+        status:
+          type: string
+          description: "scheduled | in_progress | completed | overdue | cancelled"
+        assignedTo:
+          type: ["integer", "null"]
+        assignedToName:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        updatedAt:
+          type: ["string", "null"]
+
+    MaintenanceScheduleInput:
+      type: object
+      required:
+        - title
+        - assetCategory
+        - frequency
+        - scheduledDate
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        assetCategory:
+          type: string
+        assetId:
+          type: ["integer", "null"]
+        frequency:
+          type: string
+        scheduledDate:
+          type: string
+        assignedTo:
+          type: ["integer", "null"]
+        notes:
+          type: string
+
+    MaintenanceScheduleUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        assetCategory:
+          type: string
+        assetId:
+          type: ["integer", "null"]
+        frequency:
+          type: string
+        scheduledDate:
+          type: string
+        completedDate:
+          type: string
+        status:
+          type: string
+        assignedTo:
+          type: ["integer", "null"]
+        notes:
+          type: string
+
+    # ── Knowledge Base schemas ─────────────────────────────────────────────
+    KnowledgeArticle:
+      type: object
+      required:
+        - id
+        - title
+        - category
+        - content
+        - createdAt
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        category:
+          type: string
+          description: "troubleshooting | procedure | policy | faq | manual"
+        content:
+          type: string
+        tags:
+          type: ["string", "null"]
+        author:
+          type: ["string", "null"]
+        viewCount:
+          type: integer
+        createdAt:
+          type: string
+        updatedAt:
+          type: ["string", "null"]
+
+    KnowledgeArticleInput:
+      type: object
+      required:
+        - title
+        - category
+        - content
+      properties:
+        title:
+          type: string
+        category:
+          type: string
+        content:
+          type: string
+        tags:
+          type: string
+        author:
+          type: string
+
+    KnowledgeArticleUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        category:
+          type: string
+        content:
+          type: string
+        tags:
+          type: string
+        author:
+          type: string
+
+    # ── User schemas ───────────────────────────────────────────────────────
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - email
+        - role
+        - department
+        - createdAt
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          description: "admin | ict_officer | user"
+        department:
+          type: string
+        phone:
+          type: ["string", "null"]
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+
+    UserInput:
+      type: object
+      required:
+        - name
+        - email
+        - role
+        - department
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+        department:
+          type: string
+        phone:
+          type: string
+
+    UserUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+        department:
+          type: string
+        phone:
+          type: string
+        isActive:
+          type: boolean
+
+    # ── Dashboard schemas ──────────────────────────────────────────────────
+    DashboardSummary:
+      type: object
+      required:
+        - totalTickets
+        - openTickets
+        - inProgressTickets
+        - resolvedToday
+        - totalAssets
+        - activeAssets
+        - assetsUnderRepair
+        - lowStockItems
+        - upcomingMaintenance
+        - overdueMaintenace
+      properties:
+        totalTickets:
+          type: integer
+        openTickets:
+          type: integer
+        inProgressTickets:
+          type: integer
+        resolvedToday:
+          type: integer
+        totalAssets:
+          type: integer
+        activeAssets:
+          type: integer
+        assetsUnderRepair:
+          type: integer
+        lowStockItems:
+          type: integer
+        upcomingMaintenance:
+          type: integer
+        overdueMaintenace:
+          type: integer
+
+    StatusCount:
+      type: object
+      required:
+        - status
+        - count
+      properties:
+        status:
+          type: string
+        count:
+          type: integer
+
+    CategoryCount:
+      type: object
+      required:
+        - category
+        - count
+      properties:
+        category:
+          type: string
+        count:
+          type: integer
