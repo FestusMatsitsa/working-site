@@ -361,6 +361,15 @@ export interface ErrorResponse {
   error: string;
 }
 
+export interface ForgotPasswordInput {
+  email: string;
+}
+
+export interface ResetPasswordInput {
+  token: string;
+  password: string;
+}
+
 export type ListTicketsParams = {
 status?: string;
 category?: string;

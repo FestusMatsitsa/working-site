@@ -109,6 +109,27 @@ export async function notifyTicketStatusChanged(opts: {
   );
 }
 
+export async function sendPasswordReset(opts: {
+  name: string;
+  email: string;
+  resetUrl: string;
+  expiresInMinutes: number;
+}) {
+  await send(
+    opts.email,
+    "🔑 Password Reset — ICT Helpdesk",
+    base(`
+      <p>Hi <strong>${opts.name}</strong>,</p>
+      <p>A password reset was requested for your ICT Helpdesk account. Click the button below to set a new password.</p>
+      <a href="${opts.resetUrl}" style="display:inline-block;margin:20px 0;padding:12px 24px;background:#1a5c3a;color:white;text-decoration:none;border-radius:6px;font-size:14px;font-weight:bold">
+        Reset My Password
+      </a>
+      <p style="color:#888;font-size:13px">This link expires in <strong>${opts.expiresInMinutes} minutes</strong>. If you did not request a reset, ignore this email — your password will not change.</p>
+      <p style="color:#bbb;font-size:12px;word-break:break-all">Or copy this link: ${opts.resetUrl}</p>
+    `)
+  );
+}
+
 export async function notifyNewComment(opts: {
   assigneeEmail: string;
   assigneeName: string;

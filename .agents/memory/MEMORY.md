@@ -1,0 +1,1 @@
+- [Auth system design](auth-system.md) — session-based auth with bcrypt, first-time login sets password; ict_officer role = technician rank in hasRole()

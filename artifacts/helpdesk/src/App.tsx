@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/context/auth";
 import { Layout } from "./components/layout";
 import Login from "./pages/login";
+import ResetPassword from "./pages/reset-password";
 import Dashboard from "./pages/dashboard";
 import Tickets from "./pages/tickets";
 import TicketDetail from "./pages/ticket-detail";
@@ -40,6 +41,13 @@ function LoadingScreen() {
 
 function Router() {
   const { state } = useAuth();
+
+  // Public routes — accessible without a session
+  if (window.location.pathname.startsWith(
+    (import.meta.env.BASE_URL ?? "").replace(/\/$/, "") + "/reset-password"
+  )) {
+    return <ResetPassword />;
+  }
 
   if (state.status === "loading") return <LoadingScreen />;
   if (state.status === "unauthenticated") return <Login />;
