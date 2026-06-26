@@ -84,6 +84,27 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /users/{id}/reset-link:
+    post:
+      operationId: sendUserResetLink
+      tags: [users]
+      summary: Admin — send a password reset link to a specific user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Reset link sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SendResetLinkResponse"
+        "404":
+          description: User not found
+
   /auth/forgot-password:
     post:
       operationId: forgotPassword
@@ -1543,6 +1564,17 @@ components:
         - error
       properties:
         error:
+          type: string
+
+    SendResetLinkResponse:
+      type: object
+      required:
+        - message
+        - resetUrl
+      properties:
+        message:
+          type: string
+        resetUrl:
           type: string
 
     ForgotPasswordInput:

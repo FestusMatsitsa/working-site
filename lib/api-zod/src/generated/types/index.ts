@@ -33,6 +33,7 @@ export * from './maintenanceScheduleInput';
 export * from './maintenanceScheduleUpdate';
 export * from './messageResponse';
 export * from './resetPasswordInput';
+export * from './sendResetLinkResponse';
 export * from './statusCount';
 export * from './ticket';
 export * from './ticketComment';

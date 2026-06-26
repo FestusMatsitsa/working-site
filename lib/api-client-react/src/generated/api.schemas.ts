@@ -361,6 +361,11 @@ export interface ErrorResponse {
   error: string;
 }
 
+export interface SendResetLinkResponse {
+  message: string;
+  resetUrl: string;
+}
+
 export interface ForgotPasswordInput {
   email: string;
 }

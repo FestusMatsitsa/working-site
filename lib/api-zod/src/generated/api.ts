@@ -48,6 +48,19 @@ export const GetMeResponse = zod.object({
 
 
 /**
+ * @summary Admin — send a password reset link to a specific user
+ */
+export const SendUserResetLinkParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const SendUserResetLinkResponse = zod.object({
+  "message": zod.string(),
+  "resetUrl": zod.string()
+})
+
+
+/**
  * @summary Request a password reset link
  */
 export const ForgotPasswordBody = zod.object({

@@ -47,6 +47,7 @@ import type {
   MaintenanceScheduleUpdate,
   MessageResponse,
   ResetPasswordInput,
+  SendResetLinkResponse,
   StatusCount,
   Ticket,
   TicketComment,
@@ -301,6 +302,76 @@ export function useGetMe<TData = Awaited<ReturnType<typeof getMe>>, TError = Err
 
 
 
+
+export const getSendUserResetLinkUrl = (id: number,) => {
+
+
+
+
+  return `/api/users/${id}/reset-link`
+}
+
+/**
+ * @summary Admin — send a password reset link to a specific user
+ */
+export const sendUserResetLink = async (id: number, options?: RequestInit): Promise<SendResetLinkResponse> => {
+
+  return customFetch<SendResetLinkResponse>(getSendUserResetLinkUrl(id),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+export const getSendUserResetLinkMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sendUserResetLink>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof sendUserResetLink>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['sendUserResetLink'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof sendUserResetLink>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  sendUserResetLink(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SendUserResetLinkMutationResult = NonNullable<Awaited<ReturnType<typeof sendUserResetLink>>>
+
+    export type SendUserResetLinkMutationError = ErrorType<void>
+
+    /**
+ * @summary Admin — send a password reset link to a specific user
+ */
+export const useSendUserResetLink = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sendUserResetLink>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof sendUserResetLink>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getSendUserResetLinkMutationOptions(options));
+    }
 
 export const getForgotPasswordUrl = () => {
 

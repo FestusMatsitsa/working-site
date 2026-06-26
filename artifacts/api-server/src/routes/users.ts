@@ -1,6 +1,7 @@
-import { Router, type IRouter } from "express";
+import { Router, type IRouter, type RequestHandler } from "express";
+import crypto from "crypto";
 import { eq } from "drizzle-orm";
-import { db, usersTable } from "@workspace/db";
+import { db, usersTable, passwordResetTokensTable } from "@workspace/db";
 import {
   ListUsersResponse,
   CreateUserBody,
@@ -12,8 +13,11 @@ import {
   UpdateUserResponse,
   DeleteUserParams,
 } from "@workspace/api-zod";
+import { sendPasswordReset } from "../mailer.js";
 
 const router: IRouter = Router();
+
+const RESET_EXPIRES_MINUTES = 60;
 
 function enrichUser(u: typeof usersTable.$inferSelect) {
   return {
@@ -95,5 +99,37 @@ router.delete("/users/:id", async (req, res): Promise<void> => {
 
   res.sendStatus(204);
 });
+
+// Admin: send a password reset link to any user by ID
+router.post("/users/:id/reset-link", (async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  if (isNaN(id)) {
+    res.status(400).json({ error: "Invalid user id" });
+    return;
+  }
+
+  const [user] = await db.select().from(usersTable).where(eq(usersTable.id, id)).limit(1);
+  if (!user) {
+    res.status(404).json({ error: "User not found" });
+    return;
+  }
+
+  const token = crypto.randomBytes(32).toString("hex");
+  const expiresAt = new Date(Date.now() + RESET_EXPIRES_MINUTES * 60 * 1000);
+
+  await db.insert(passwordResetTokensTable).values({ userId: user.id, token, expiresAt });
+
+  const domain = process.env.REPLIT_DEV_DOMAIN ?? "localhost";
+  const resetUrl = `https://${domain}/reset-password?token=${token}`;
+
+  await sendPasswordReset({
+    name: user.name,
+    email: user.email,
+    resetUrl,
+    expiresInMinutes: RESET_EXPIRES_MINUTES,
+  });
+
+  res.json({ message: `Reset link sent to ${user.email}`, resetUrl });
+}) as RequestHandler);
 
 export default router;
