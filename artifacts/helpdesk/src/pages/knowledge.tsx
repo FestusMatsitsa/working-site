@@ -36,10 +36,15 @@ export default function Knowledge() {
     { query: { queryKey: getListKnowledgeArticlesQueryKey({ category: categoryFilter || undefined }) } }
   );
 
+  function parseTags(tags?: string | null): string[] {
+    if (!tags) return [];
+    return tags.split(",").map(t => t.trim()).filter(Boolean);
+  }
+
   const filtered = articles.filter(a =>
     search === "" ||
     a.title.toLowerCase().includes(search.toLowerCase()) ||
-    (a.tags ?? []).some(t => t.toLowerCase().includes(search.toLowerCase()))
+    (a.tags ?? "").toLowerCase().includes(search.toLowerCase())
   );
 
   const published = filtered.filter(a => a.isPublished);
@@ -114,9 +119,9 @@ export default function Knowledge() {
                   </p>
                 )}
               </div>
-              {(article.tags ?? []).length > 0 && (
+              {parseTags(article.tags).length > 0 && (
                 <div className="flex flex-wrap gap-1">
-                  {(article.tags ?? []).slice(0, 4).map(tag => (
+                  {parseTags(article.tags).slice(0, 4).map(tag => (
                     <span key={tag} className="text-xs bg-muted text-muted-foreground px-1.5 py-0.5 rounded">{tag}</span>
                   ))}
                 </div>
@@ -149,7 +154,7 @@ function CreateArticleModal({ onClose }: { onClose: () => void }) {
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.title || !form.content || !form.category) return;
-    const tags = tagsInput.split(",").map(t => t.trim()).filter(Boolean);
+    const tags = tagsInput.split(",").map(t => t.trim()).filter(Boolean).join(",");
     createArticle({ data: { ...form, tags } as KnowledgeArticleInput }, {
       onSuccess: (data) => {
         qc.invalidateQueries({ queryKey: getListKnowledgeArticlesQueryKey({}) });

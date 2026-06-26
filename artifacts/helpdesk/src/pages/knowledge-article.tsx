@@ -85,9 +85,9 @@ export default function KnowledgeArticle() {
               <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-medium">Draft</span>
             )}
           </div>
-          {(article.tags ?? []).length > 0 && (
+          {article.tags && (
             <div className="flex flex-wrap gap-2 mt-3">
-              {(article.tags ?? []).map(tag => (
+              {article.tags.split(",").map(t => t.trim()).filter(Boolean).map(tag => (
                 <span key={tag} className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded">{tag}</span>
               ))}
             </div>

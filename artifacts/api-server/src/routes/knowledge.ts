@@ -17,8 +17,17 @@ import {
 const router: IRouter = Router();
 
 function enrichArticle(a: typeof knowledgeTable.$inferSelect) {
+  // tags may be stored as JSON array (from seed) or comma-separated string — normalise to string
+  let tags: string | null = a.tags ?? null;
+  if (tags && tags.startsWith("[")) {
+    try {
+      const arr = JSON.parse(tags);
+      tags = Array.isArray(arr) ? arr.join(",") : tags;
+    } catch {}
+  }
   return {
     ...a,
+    tags,
     createdAt: a.createdAt.toISOString(),
     updatedAt: a.updatedAt?.toISOString() ?? null,
   };
@@ -45,6 +54,7 @@ router.get("/knowledge", async (req, res): Promise<void> => {
     );
   }
 
+  // enrichArticle splits tags string → array
   res.json(ListKnowledgeArticlesResponse.parse(articles.map(enrichArticle)));
 });
 
