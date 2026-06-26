@@ -339,6 +339,28 @@ export interface StatusCount {
   count: number;
 }
 
+export interface LoginInput {
+  email: string;
+  password: string;
+}
+
+export interface AuthUser {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  department: string;
+  phone?: string | null;
+}
+
+export interface MessageResponse {
+  message: string;
+}
+
+export interface ErrorResponse {
+  error: string;
+}
+
 export type ListTicketsParams = {
 status?: string;
 category?: string;

@@ -1,8 +1,10 @@
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import { Switch, Route, Router as WouterRouter, Redirect } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider, useAuth } from "@/context/auth";
 import { Layout } from "./components/layout";
+import Login from "./pages/login";
 import Dashboard from "./pages/dashboard";
 import Tickets from "./pages/tickets";
 import TicketDetail from "./pages/ticket-detail";
@@ -16,9 +18,32 @@ import Users from "./pages/users";
 import Reports from "./pages/reports";
 import NotFound from "@/pages/not-found";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error: unknown) => {
+        // Don't retry on 401
+        if (error && typeof error === "object" && "status" in error && (error as { status: number }).status === 401) return false;
+        return failureCount < 2;
+      },
+    },
+  },
+});
+
+function LoadingScreen() {
+  return (
+    <div className="min-h-screen bg-sidebar flex items-center justify-center">
+      <div className="text-sidebar-foreground/50 text-sm">Loading…</div>
+    </div>
+  );
+}
 
 function Router() {
+  const { state } = useAuth();
+
+  if (state.status === "loading") return <LoadingScreen />;
+  if (state.status === "unauthenticated") return <Login />;
+
   return (
     <Layout>
       <Switch>
@@ -44,7 +69,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
+          <AuthProvider>
+            <Router />
+          </AuthProvider>
         </WouterRouter>
         <Toaster />
       </TooltipProvider>

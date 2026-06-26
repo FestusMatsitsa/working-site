@@ -9,6 +9,45 @@ import * as zod from 'zod';
 
 
 /**
+ * @summary Log in with email and password
+ */
+export const LoginBody = zod.object({
+  "email": zod.string(),
+  "password": zod.string()
+})
+
+export const LoginResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "role": zod.string(),
+  "department": zod.string(),
+  "phone": zod.string().nullish()
+})
+
+
+/**
+ * @summary Log out
+ */
+export const LogoutResponse = zod.object({
+  "message": zod.string()
+})
+
+
+/**
+ * @summary Get current authenticated user
+ */
+export const GetMeResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "role": zod.string(),
+  "department": zod.string(),
+  "phone": zod.string().nullish()
+})
+
+
+/**
  * @summary Health check
  */
 export const HealthCheckResponse = zod.object({
