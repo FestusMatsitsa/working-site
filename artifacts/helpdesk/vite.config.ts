@@ -4,7 +4,8 @@ import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal"; // fixed typo if needed
 
-const rawPort = process.env.PORT;
+const rawPort = process.env.VITE_PORT || "5173";
+
 if (!rawPort) {
   throw new Error("PORT environment variable is required but was not provided.");
 }
