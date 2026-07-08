@@ -38,7 +38,7 @@ router.get("/dashboard/summary", async (_req, res): Promise<void> => {
   const upcomingMaintenance = maintenance.filter(m =>
     m.status === "scheduled" && m.scheduledDate >= today
   ).length;
-  const overdueMaintenace = maintenance.filter(m =>
+  const overdueMaintenance = maintenance.filter(m =>
     m.status === "scheduled" && m.scheduledDate < today
   ).length;
 
@@ -52,7 +52,7 @@ router.get("/dashboard/summary", async (_req, res): Promise<void> => {
     assetsUnderRepair,
     lowStockItems,
     upcomingMaintenance,
-    overdueMaintenace,
+    overdueMaintenance,
   }));
 });
 
