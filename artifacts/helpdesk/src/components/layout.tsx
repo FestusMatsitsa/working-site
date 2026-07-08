@@ -49,7 +49,7 @@ export function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen w-full bg-background text-foreground">
       {/* Sidebar */}
-      <aside className="w-64 flex-shrink-0 bg-sidebar border-r border-sidebar-border flex flex-col text-sidebar-foreground">
+      <aside className="w-64 shrink-0 bg-sidebar border-r border-sidebar-border flex flex-col text-sidebar-foreground">
         <div className="p-4 flex flex-col gap-1 border-b border-sidebar-border">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-8 h-8 rounded bg-primary-foreground flex items-center justify-center text-primary font-bold shadow-sm">
@@ -88,7 +88,7 @@ export function Layout({ children }: { children: ReactNode }) {
           {/* Current user */}
           {user && (
             <div className="flex items-center gap-2.5 px-1">
-              <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary-foreground flex-shrink-0">
+              <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary-foreground shrink-0">
                 {user.name.charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
@@ -96,7 +96,7 @@ export function Layout({ children }: { children: ReactNode }) {
                 <p className="text-xs text-sidebar-foreground/50 truncate">{user.email}</p>
               </div>
               {roleBadge && (
-                <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded flex-shrink-0 ${roleBadge.cls}`}>
+                <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded shrink-0 ${roleBadge.cls}`}>
                   {roleBadge.label}
                 </span>
               )}
