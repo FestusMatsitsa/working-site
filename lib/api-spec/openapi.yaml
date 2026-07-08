@@ -1470,7 +1470,7 @@ components:
         - assetsUnderRepair
         - lowStockItems
         - upcomingMaintenance
-        - overdueMaintenace
+        - overdueMaintenance
       properties:
         totalTickets:
           type: integer
@@ -1490,7 +1490,7 @@ components:
           type: integer
         upcomingMaintenance:
           type: integer
-        overdueMaintenace:
+        overdueMaintenance:
           type: integer
 
     StatusCount:
