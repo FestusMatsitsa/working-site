@@ -906,7 +906,7 @@ export const GetDashboardSummaryResponse = zod.object({
   "assetsUnderRepair": zod.number(),
   "lowStockItems": zod.number(),
   "upcomingMaintenance": zod.number(),
-  "overdueMaintenace": zod.number()
+  "overdueMaintenance": zod.number()
 })
 
 
