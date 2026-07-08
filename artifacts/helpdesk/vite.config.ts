@@ -57,6 +57,7 @@ export default defineConfig({
     allowedHosts: true,
     fs: {
       strict: true,
+      allow: [path.resolve(import.meta.dirname, "..", "..")],
     },
     // === ADD THIS PROXY BLOCK ===
     proxy: {
