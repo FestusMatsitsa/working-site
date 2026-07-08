@@ -16,5 +16,5 @@ export interface DashboardSummary {
   assetsUnderRepair: number;
   lowStockItems: number;
   upcomingMaintenance: number;
-  overdueMaintenace: number;
+  overdueMaintenance: number;
 }
