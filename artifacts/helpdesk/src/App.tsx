@@ -55,7 +55,6 @@ function Router() {
   return (
     <Layout>
       <Switch>
-        <Route path="/" component={Dashboard} />
         <Route path="/tickets" component={Tickets} />
         <Route path="/tickets/:id" component={TicketDetail} />
         <Route path="/assets" component={Assets} />
@@ -66,6 +65,7 @@ function Router() {
         <Route path="/knowledge/:id" component={KnowledgeArticle} />
         <Route path="/users" component={Users} />
         <Route path="/reports" component={Reports} />
+        <Route path="/" component={Dashboard} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
