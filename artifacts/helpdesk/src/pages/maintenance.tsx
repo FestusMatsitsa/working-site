@@ -9,7 +9,7 @@ import {
 import type { MaintenanceScheduleInput } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { format, isPast, isWithinInterval, addDays } from "date-fns";
-import { Plus, Search, AlertTriangle, Clock, CheckCircle2, Wrench } from "lucide-react";
+import { Plus, Search, AlertTriangle, Clock, CheckCircle2 } from "lucide-react";
 
 const STATUS_COLORS: Record<string, string> = {
   scheduled: "bg-blue-100 text-blue-700",
@@ -176,12 +176,11 @@ function CompleteModal({ item, onClose }: { item: { id: number; title: string };
   const qc = useQueryClient();
   const { mutate: updateSchedule, isPending } = useUpdateMaintenanceSchedule();
   const [notes, setNotes] = useState("");
-  const [nextDate, setNextDate] = useState("");
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
     updateSchedule(
-      { id: item.id, data: { status: "completed", completionNotes: notes, nextScheduledDate: nextDate || undefined } },
+      { id: item.id, data: { status: "completed", notes } },
       { onSuccess: () => { qc.invalidateQueries({ queryKey: getListMaintenanceSchedulesQueryKey({}) }); onClose(); } }
     );
   }
@@ -197,10 +196,6 @@ function CompleteModal({ item, onClose }: { item: { id: number; title: string };
           <div className="space-y-1">
             <label className="text-sm font-medium">Completion Notes</label>
             <textarea rows={3} className="w-full border rounded-md px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-ring" value={notes} onChange={e => setNotes(e.target.value)} placeholder="What was done, findings, etc." />
-          </div>
-          <div className="space-y-1">
-            <label className="text-sm font-medium">Next Scheduled Date (optional)</label>
-            <input type="date" className="w-full border rounded-md px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-ring" value={nextDate} onChange={e => setNextDate(e.target.value)} />
           </div>
           <div className="flex gap-3">
             <button type="button" onClick={onClose} className="flex-1 border rounded-md py-2 text-sm font-medium hover:bg-muted transition-colors">Cancel</button>
@@ -219,7 +214,7 @@ function CreateMaintenanceModal({ onClose }: { onClose: () => void }) {
   const { mutate: createSchedule, isPending } = useCreateMaintenanceSchedule();
   const { data: assets = [] } = useListAssets({}, { query: { queryKey: getListAssetsQueryKey({}) } });
   const { data: users = [] } = useListUsers({ query: { queryKey: getListUsersQueryKey() } });
-  const [form, setForm] = useState<Partial<MaintenanceScheduleInput>>({ frequency: "monthly", status: "scheduled" });
+  const [form, setForm] = useState<Partial<MaintenanceScheduleInput>>({ frequency: "monthly" });
 
   function set(field: keyof MaintenanceScheduleInput, value: string | number | null) {
     setForm(f => ({ ...f, [field]: value }));
@@ -227,7 +222,7 @@ function CreateMaintenanceModal({ onClose }: { onClose: () => void }) {
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.title || !form.frequency || !form.scheduledDate) return;
+    if (!form.title || !form.assetCategory || !form.frequency || !form.scheduledDate) return;
     createSchedule({ data: form as MaintenanceScheduleInput }, {
       onSuccess: () => { qc.invalidateQueries({ queryKey: getListMaintenanceSchedulesQueryKey({}) }); onClose(); },
     });
@@ -243,6 +238,9 @@ function CreateMaintenanceModal({ onClose }: { onClose: () => void }) {
           </Field>
           <Field label="Description">
             <textarea rows={2} className={inputCls} value={form.description ?? ""} onChange={e => set("description", e.target.value)} />
+          </Field>
+          <Field label="Asset Category *">
+            <input required className={inputCls} value={form.assetCategory ?? ""} onChange={e => set("assetCategory", e.target.value)} placeholder="e.g. Server, Workstation, Network" />
           </Field>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Frequency *">
@@ -273,9 +271,6 @@ function CreateMaintenanceModal({ onClose }: { onClose: () => void }) {
                 <option key={u.id} value={u.id}>{u.name}</option>
               ))}
             </select>
-          </Field>
-          <Field label="Estimated Duration (hours)">
-            <input type="number" min={0} step={0.5} className={inputCls} value={form.estimatedDuration ?? ""} onChange={e => set("estimatedDuration", Number(e.target.value))} />
           </Field>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose} className="flex-1 border rounded-md py-2 text-sm font-medium hover:bg-muted transition-colors">Cancel</button>
