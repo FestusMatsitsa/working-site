@@ -49,7 +49,7 @@ export default function Reports() {
             { label: "Total Tickets", value: summary.totalTickets, sub: `${summary.openTickets} open` },
             { label: "Total Assets", value: summary.totalAssets, sub: `${summary.activeAssets} active` },
             { label: "Low Stock Items", value: summary.lowStockItems, sub: "below minimum", danger: summary.lowStockItems > 0 },
-            { label: "Upcoming Maintenance", value: summary.upcomingMaintenance, sub: `${summary.overdueMaintenace} overdue`, danger: summary.overdueMaintenace > 0 },
+            { label: "Upcoming Maintenance", value: summary.upcomingMaintenance, sub: `${summary.overdueMaintenance} overdue`, danger: summary.overdueMaintenance > 0 },
           ].map(card => (
             <div key={card.label} className={`border rounded-lg p-4 shadow-sm ${card.danger ? "bg-red-50 border-red-200" : "bg-card"}`}>
               <p className="text-xs text-muted-foreground font-medium">{card.label}</p>
@@ -75,7 +75,7 @@ export default function Reports() {
         <ChartCard title="Tickets by Category">
           <ResponsiveContainer width="100%" height={220}>
             <PieChart>
-              <Pie data={byCategory} dataKey="count" nameKey="category" cx="50%" cy="50%" outerRadius={75} label={({ category, percent }) => `${category} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
+              <Pie data={byCategory} dataKey="count" nameKey="category" cx="50%" cy="50%" outerRadius={75} label={({ payload, percent }) => `${payload?.category ?? payload?.name ?? ""} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
                 {byCategory?.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
               </Pie>
               <Tooltip />
@@ -97,7 +97,7 @@ export default function Reports() {
         <ChartCard title="Assets by Status">
           <ResponsiveContainer width="100%" height={220}>
             <PieChart>
-              <Pie data={assetsByStatus} dataKey="count" nameKey="status" cx="50%" cy="50%" outerRadius={75} label={({ status, percent }) => `${status?.replace("_", " ")} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
+              <Pie data={assetsByStatus} dataKey="count" nameKey="status" cx="50%" cy="50%" outerRadius={75} label={({ payload, percent }) => `${(payload?.status ?? payload?.name ?? "").toString().replace("_", " ")} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
                 {assetsByStatus.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
               </Pie>
               <Tooltip />
@@ -118,9 +118,9 @@ export default function Reports() {
 
         <ChartCard title="Low Stock Items">
           {lowStock.length === 0 ? (
-            <div className="flex items-center justify-center h-[220px] text-muted-foreground text-sm">All items fully stocked</div>
+            <div className="flex items-center justify-center h-55 text-muted-foreground text-sm">All items fully stocked</div>
           ) : (
-            <div className="overflow-auto max-h-[220px]">
+            <div className="overflow-auto max-h-55">
               <table className="w-full text-sm">
                 <thead className="sticky top-0 bg-card">
                   <tr className="border-b">
