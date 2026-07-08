@@ -5,7 +5,6 @@ import {
   useGetTicketsByStatus, getGetTicketsByStatusQueryKey,
   useGetTicketsByCategory, getGetTicketsByCategoryQueryKey,
   useGetRecentTickets, getGetRecentTicketsQueryKey,
-  useGetUpcomingMaintenance, getGetUpcomingMaintenanceQueryKey,
   useGetLowStockItems, getGetLowStockItemsQueryKey
 } from "@workspace/api-client-react";
 import { 
@@ -25,14 +24,31 @@ const PIE_COLORS = ["hsl(var(--chart-1))", "hsl(var(--chart-2))", "hsl(var(--cha
 export default function Dashboard() {
   const [, setLocation] = useLocation();
 
-  const { data: summary } = useGetDashboardSummary({ query: { queryKey: getGetDashboardSummaryQueryKey() } });
-  const { data: ticketsStatus } = useGetTicketsByStatus({ query: { queryKey: getGetTicketsByStatusQueryKey() } });
-  const { data: ticketsCategory } = useGetTicketsByCategory({ query: { queryKey: getGetTicketsByCategoryQueryKey() } });
-  const { data: recentTickets } = useGetRecentTickets({ query: { queryKey: getGetRecentTicketsQueryKey() } });
-  const { data: upcomingMaintenance } = useGetUpcomingMaintenance({ query: { queryKey: getGetUpcomingMaintenanceQueryKey() } });
-  const { data: lowStock } = useGetLowStockItems({ query: { queryKey: getGetLowStockItemsQueryKey() } });
+  const { data: summary, isLoading: summaryLoading, isError: summaryError } = useGetDashboardSummary({ query: { queryKey: getGetDashboardSummaryQueryKey() } });
+  const { data: ticketsStatus = [], isLoading: ticketsStatusLoading, isError: ticketsStatusError } = useGetTicketsByStatus({ query: { queryKey: getGetTicketsByStatusQueryKey() } });
+  const { data: ticketsCategory = [], isLoading: ticketsCategoryLoading, isError: ticketsCategoryError } = useGetTicketsByCategory({ query: { queryKey: getGetTicketsByCategoryQueryKey() } });
+  const { data: recentTickets = [], isLoading: recentTicketsLoading, isError: recentTicketsError } = useGetRecentTickets({ query: { queryKey: getGetRecentTicketsQueryKey() } });
+  const { data: lowStock = [], isLoading: lowStockLoading, isError: lowStockError } = useGetLowStockItems({ query: { queryKey: getGetLowStockItemsQueryKey() } });
 
-  if (!summary) {
+  const isLoading = summaryLoading || ticketsStatusLoading || ticketsCategoryLoading || recentTicketsLoading || lowStockLoading;
+  const hasError = summaryError || ticketsStatusError || ticketsCategoryError || recentTicketsError || lowStockError;
+
+  if (hasError) {
+    return (
+      <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-6 text-destructive">
+        <h2 className="text-lg font-semibold mb-2">Unable to load dashboard</h2>
+        <p className="text-sm text-destructive/80 mb-3">There was a problem loading the dashboard data. Please refresh the page or try again later.</p>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="text-sm bg-destructive text-destructive-foreground px-3 py-1 rounded hover:bg-destructive/90"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (!summary || isLoading) {
     return <div className="animate-pulse space-y-8">
       <div className="h-10 w-48 bg-muted rounded"></div>
       <div className="grid grid-cols-4 gap-4">
@@ -71,10 +87,10 @@ export default function Dashboard() {
         <SummaryCard 
           title="Upcoming Maint." 
           value={summary.upcomingMaintenance} 
-          subtitle={`${summary.overdueMaintenace} overdue tasks`}
+          subtitle={`${summary.overdueMaintenance} overdue tasks`}
           icon={<Clock className="text-orange-500 w-5 h-5" />}
           onClick={() => setLocation("/maintenance")}
-          danger={summary.overdueMaintenace > 0}
+          danger={summary.overdueMaintenance > 0}
         />
       </div>
 
